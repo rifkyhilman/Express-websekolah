@@ -32,38 +32,52 @@ function readUser(req, res) {
         })
 }
 function updateUser(req, res) {
-    model.User.update({
-        name: req.body.name,
-        label: req.body.label,
-        picture: req.body.picture,
-        email: req.body.email,
-        phone: req.body.phone,
-        website: req.body.website,
-        summary: req.body.summary
-    }, {
-        where: {
-            id: req.params.id
-        }
-    })
-        .then(function (result) {
-            res.json(result)
+    let decodedId = req.decoded.id
+    if (Number(decodedId) === Number(req.params.id)) {
+        model.User.update({
+            name: req.body.name,
+            label: req.body.label,
+            picture: req.body.picture,
+            email: req.body.email,
+            phone: req.body.phone,
+            website: req.body.website,
+            summary: req.body.summary
+        }, {
+            where: {
+                id: req.params.id
+            }
         })
-        .catch(function (error) {
-            res.json({ error: error })
+            .then(function (result) {
+                res.json(result)
+            })
+            .catch(function (error) {
+                res.json({ error: error })
+            })
+    } else {
+        res.json({
+            message: "Ini bukan data Anda"
         })
+    }
 }
 function deleteUser(req, res) {
-    model.User.destroy({
-        where: {
-            id: req.params.id
-        }
-    })
-        .then(function (result) {
-            res.json(result)
+    let decodedId = req.decoded.id
+    if (Number(decodedId) === Number(req.params.id)) {
+        model.User.destroy({
+            where: {
+                id: req.params.id
+            }
         })
-        .catch(function (error) {
-            res.json({ error: error })
+            .then(function (result) {
+                res.json(result)
+            })
+            .catch(function (error) {
+                res.json({ error: error })
+            })
+    } else {
+        res.json({
+            message: "Ini bukan data Anda"
         })
+    }
 }
 function loginUser(req, res) {
     const email = req.body.email
